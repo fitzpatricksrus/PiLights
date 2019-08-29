@@ -17,6 +17,6 @@ void LampMatrix::setLamps(std::shared_ptr<LampSet>& lampsIn) {
     if (lampsIn->getLampCount() != rows*cols) {
         throw invalid_argument("Lamps do not match matrix geometry");
     }
-    lamps = std::move(lampsIn);
+    lamps = lampsIn;
 }
 
