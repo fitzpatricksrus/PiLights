@@ -17,13 +17,12 @@ public:
 
     virtual MonoLampSet* getLamps() const override { return lamps; };
     virtual void setLamps(MonoLampSet* lampsIn) override;
+    virtual void startRefresh() override { refreshThread.start(); }
+    virtual void stopRefresh() override { refreshThread.stop(); }
+    virtual bool refreshIsActive() override { return refreshThread.isRunning(); }
 
     virtual int getRowCount() const { return rows; };
     virtual int getColCount() const { return cols; };
-
-    virtual void startRefresh() { refreshThread.start(); }
-    virtual void stopRefresh() { refreshThread.stop(); }
-    virtual bool refreshIsActive() { return refreshThread.isRunning(); }
 
 protected:
     virtual void refreshColumn(int col, const bool* values) = 0;
