@@ -5,18 +5,17 @@
 #ifndef PILIGHTS_MONOLAMPSET_H
 #define PILIGHTS_MONOLAMPSET_H
 
-#include <vector>
+#include <array>
 
 class MonoLampSet {
 public:
     virtual ~MonoLampSet();
 
     virtual int getLampCount() const = 0;
-    virtual bool getLampValue(int ndx) const = 0;
-    virtual std::vector<bool> getLampValues() const = 0;
-    virtual std::vector<bool>::const_iterator begin() const = 0;
-    virtual std::vector<bool>::const_iterator end() const = 0;
-    virtual bool operator[](int ndx) const = 0;
+    virtual const bool& operator[](int ndx) const = 0;
+    virtual bool& operator[](int ndx) = 0;
+    virtual const bool* data() const = 0;
+    virtual bool* data() = 0;
 };
 
 #endif //PILIGHTS_MONOLAMPSET_H

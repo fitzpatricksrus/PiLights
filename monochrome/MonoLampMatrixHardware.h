@@ -6,23 +6,57 @@
 #define PILIGHTS_MONOLAMPMATRIXHARDWARE_H
 
 #include "MonoLampHardware.h"
+#include "TThread.h"
+#include <stdexcept>
 
-class MonoLampMatrixHardware : public MonoLampMatrixHardware {
+template <int rows, int cols>
+class MonoLampMatrixHardware : public MonoLampHardware {
 public:
-    MonoLampMatrixHardware(int rows, int cols);
+    MonoLampMatrixHardware();
     virtual ~MonoLampMatrixHardware() = default;
 
-    virtual std::shared_ptr<MonoLampSet> getLamps() const override { return lamps; };
-    virtual void setLamps(std::shared_ptr<MonoLampSet>& lampsIn) override;
+    virtual MonoLampSet* getLamps() const override { return lamps; };
+    virtual void setLamps(MonoLampSet* lampsIn) override;
 
     virtual int getRowCount() const { return rows; };
     virtual int getColCount() const { return cols; };
 
+    virtual void startRefresh() { refreshThread.start(); }
+    virtual void stopRefresh() { refreshThread.stop(); }
+    virtual bool refreshIsActive() { return refreshThread.isRunning(); }
+
+protected:
+    virtual void refreshColumn(int col, const bool* values) = 0;
+    virtual void refreshLamps();
+
 private:
-    int rows;
-    int cols;
-    std::shared_ptr<MonoLampSet> lamps;
+    MonoLampSet* lamps;
+    TThreadOf<MonoLampMatrixHardware> refreshThread;
 };
+
+
+template <int rows, int cols>
+MonoLampMatrixHardware<rows, cols>::MonoLampMatrixHardware()
+    : MonoLampHardware(), lamps(nullptr), refreshThread(this, &MonoLampMatrixHardware::refreshLamps)
+{
+}
+
+template <int rows, int cols>
+void MonoLampMatrixHardware<rows, cols>::setLamps(MonoLampSet* lampsIn) {
+    if (lampsIn->getLampCount() != rows*cols) {
+        throw std::invalid_argument("Lamps do not match matrix geometry");
+    }
+    lamps = lampsIn;
+}
+
+template <int rows, int cols>
+void MonoLampMatrixHardware<rows, cols>::refreshLamps() {
+    const bool* values = lamps->data();
+    for (int currentCol = 0; currentCol < cols; currentCol++) {
+        refreshColumn(currentCol, values);
+        values += rows;
+    }
+}
 
 
 #endif //PILIGHTS_MONOLAMPMATRIXHARDWARE_H

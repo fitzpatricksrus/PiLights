@@ -7,40 +7,28 @@
 
 #include "MonoLampSet.h"
 
+#include <array>
+
+template <int lampCount>
 class SimpleMonoLampSet : public MonoLampSet {
 public:
-    SimpleMonoLampSet(int lampCount);
-    SimpleMonoLampSet(int lampCount, bool* lampsIn);
-    SimpleMonoLampSet(bool* begin, bool* eng);
-    SimpleMonoLampSet(std::vector<bool> lampsIn);
-    SimpleMonoLampSet(const SimpleMonoLampSet& other);
-    virtual ~SimpleMonoLampSet();
+    SimpleMonoLampSet<lampCount>& operator=(const SimpleMonoLampSet<lampCount>& other);
 
-    virtual SimpleMonoLampSet& operator=(const SimpleMonoLampSet& other);
+    virtual int getLampCount() const override { return lampCount; }
+    virtual const bool& operator[](int ndx) const override { return lampValues[ndx]; };
+    virtual bool& operator[](int ndx)  override { return lampValues[ndx]; };
+    virtual const bool* data() const override { return lampValues.data(); };
+    virtual bool* data() override { return lampValues.data(); };
 
-    virtual int getLampCount() const override;
-    virtual bool getLampValue(int ndx) const override;
-    virtual std::vector<bool> getLampValues() const override;
-    virtual std::vector<bool>::const_iterator begin() const override;
-    virtual std::vector<bool>::const_iterator end() const override;
-    virtual bool operator[](int ndx) const override;
-
-    virtual void setLampValue(int ndx, bool value);
-    virtual void setLampValues(const std::vector<bool>& newValues);
-
-    void adjustLampValues(int deltaValue) { adjustLampValues(deltaValue, 0, getLampCount()-1); }
-    virtual void adjustLampValues(int deltaValue, int firstLampNdx, int lastLampNdx);
-
-    class LampBlend;
-    static const LampBlend& AND;
-    static const LampBlend& OR;
-    static const LampBlend& NOT;
-    static const LampBlend& XOR;
-
-    virtual void blendLamps(const MonoLampSet& other, const LampBlend& blend);
-
+    virtual void clear() { lampValues.fill(false); }
 private:
-    std::vector<bool> lampValues;
+    std::array<bool, lampCount> lampValues;
 };
+
+template <int lampCount>
+SimpleMonoLampSet<lampCount>& SimpleMonoLampSet<lampCount>::operator=(const SimpleMonoLampSet<lampCount>& other) {
+    lampValues = other.lampValues;
+    return *this;
+}
 
 #endif //PILIGHTS_SIMPLEMONOLAMPSET_H

@@ -4,6 +4,8 @@
 
 #include "TThread.h"
 
+#include <stdexcept>
+
 TThread::TThread()
 : thread(nullptr)
 {
@@ -14,12 +16,15 @@ TThread::~TThread() {
 }
 
 void TThread::start() {
-    stop();
-    thread = gpioStartThread(&TThread::doStart, this);
+    if (!isRunning()) {
+        thread = gpioStartThread(&TThread::doStart, this);
+    } else {
+        throw std::logic_error("Can't call start() on a running thread.");
+    }
 }
 
 void TThread::stop() {
-    if (thread) {
+    if (isRunning()) {
         pthread_t* temp = thread;
         thread = nullptr;
         gpioStopThread(temp);

@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 project(PiLights)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
 include_directories(monochrome)
@@ -32,4 +32,5 @@ add_executable(PiLights
         TThread.h)
 
 find_library(PIGPIOLIB libpigpio.so)
-TARGET_LINK_LIBRARIES(TestProject "${PIGPIOLIB}")
+TARGET_LINK_LIBRARIES(PiLights "${PIGPIOLIB}")
+
