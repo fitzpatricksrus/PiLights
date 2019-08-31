@@ -5,7 +5,7 @@
 #ifndef PILIGHTS_SIMPLEMONOLAMPSET_H
 #define PILIGHTS_SIMPLEMONOLAMPSET_H
 
-#include "MonoLampSet.h"
+#include "monochrome/MonoLampSet.h"
 
 #include <array>
 
@@ -20,6 +20,8 @@ public:
     virtual const bool* data() const override { return lampValues.data(); };
     virtual bool* data() override { return lampValues.data(); };
 
+    virtual void setData(bool* newData);
+
     virtual void clear() { lampValues.fill(false); }
 private:
     std::array<bool, lampCount> lampValues;
@@ -29,6 +31,13 @@ template <int lampCount>
 SimpleMonoLampSet<lampCount>& SimpleMonoLampSet<lampCount>::operator=(const SimpleMonoLampSet<lampCount>& other) {
     lampValues = other.lampValues;
     return *this;
+}
+
+template <int lampCount>
+void SimpleMonoLampSet<lampCount>::setData(bool* newData) {
+    for (int i = 0; i < lampCount; i++) {
+        lampValues[i] = newData[i];
+    }
 }
 
 #endif //PILIGHTS_SIMPLEMONOLAMPSET_H

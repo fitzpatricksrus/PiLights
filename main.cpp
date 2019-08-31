@@ -2,6 +2,21 @@
 #include <iostream>
 
 #include "pigpio.h"
+#include "monochrome/DebugMonoLampMatrixHardware.h"
+#include "monochrome/SimpleMonoLampSet.h"
+
+int testRefresh() {
+    bool values[] = { 0, 1, 1, 1,   1, 0, 1, 1,   1, 1, 0, 1 };
+    SimpleMonoLampSet<12> lampSet;
+    lampSet.setData(values);
+    DebugMonoLampMatrixHardware<3,4> matrix;
+    matrix.setLamps(&lampSet);
+    matrix.startRefresh();
+    gpioSleep(PI_TIME_RELATIVE, 15, 0);
+    matrix.stopRefresh();
+    return 0;
+}
+
 
 #define TESTPIN 26
 #define CYCLE_TIME 50
@@ -19,7 +34,7 @@ void* bing(void* userData) {
     return userData;
 }
 
-int main() {
+int main2() {
     int err = gpioInitialise();
     if (err != PI_INIT_FAILED) {
        try {
@@ -37,6 +52,23 @@ int main() {
             }
             gpioWrite(TESTPIN, 0);
             gpioTerminate();
+        } catch (...) {
+            gpioTerminate();
+        }
+    } else {
+        std::cout << "Failed to initialize: " << err << std::endl;
+    }
+
+    std::cout << "Done." << std::endl;
+    return 0;
+}
+
+int main() {
+    int err = gpioInitialise();
+    if (err != PI_INIT_FAILED) {
+        try {
+            testRefresh();
+
         } catch (...) {
             gpioTerminate();
         }

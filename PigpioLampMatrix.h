@@ -6,7 +6,7 @@
 #define PILIGHTS_PIGPIOLAMPMATRIX_H
 
 #include "LampMatrix.h"
-#include "TThread.h"
+#include "utils/TThread.h"
 
 class PigpioLampMatrix;
 

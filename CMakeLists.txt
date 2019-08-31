@@ -4,7 +4,6 @@ project(PiLights)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
-include_directories(monochrome)
 
 add_executable(PiLights
         monochrome/MonoLampHardware.cpp
@@ -28,8 +27,8 @@ add_executable(PiLights
         PigpioLampMatrix.h
         SimpleLampSet.cpp
         SimpleLampSet.h
-        TThread.cpp
-        TThread.h)
+        utils/TThread.cpp
+        utils/TThread.h monochrome/DebugMonoLampMatrixHardware.cpp monochrome/DebugMonoLampMatrixHardware.h utils/FixedExecutionTimeCode.cpp utils/FixedExecutionTimeCode.h)
 
 find_library(PIGPIOLIB libpigpio.so)
 TARGET_LINK_LIBRARIES(PiLights "${PIGPIOLIB}")

@@ -5,8 +5,8 @@
 #ifndef PILIGHTS_MONOLAMPMATRIXHARDWARE_H
 #define PILIGHTS_MONOLAMPMATRIXHARDWARE_H
 
-#include "MonoLampHardware.h"
-#include "TThread.h"
+#include "monochrome/MonoLampHardware.h"
+#include "utils/TThread.h"
 #include <stdexcept>
 
 template <int rows, int cols>
@@ -25,7 +25,7 @@ public:
     virtual int getColCount() const { return cols; };
 
 protected:
-    virtual void refreshColumn(int col, const bool* values) = 0;
+    virtual void refreshColumn(int row, const bool* values) = 0;
     virtual void refreshLamps();
 
 private:
@@ -50,10 +50,12 @@ void MonoLampMatrixHardware<rows, cols>::setLamps(MonoLampSet* lampsIn) {
 
 template <int rows, int cols>
 void MonoLampMatrixHardware<rows, cols>::refreshLamps() {
-    const bool* values = lamps->data();
-    for (int currentCol = 0; currentCol < cols; currentCol++) {
-        refreshColumn(currentCol, values);
-        values += rows;
+    while (true) {
+        const bool* values = lamps->data();
+        for (int currentRow = 0; currentRow < rows; currentRow++) {
+            refreshColumn(currentRow, values);
+            values += cols;
+        }
     }
 }
 
