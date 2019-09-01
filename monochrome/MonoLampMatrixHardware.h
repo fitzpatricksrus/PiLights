@@ -18,7 +18,7 @@ public:
     virtual MonoLampSet* getLamps() const override { return lamps; };
     virtual void setLamps(MonoLampSet* lampsIn) override;
     virtual void startRefresh() override { refreshThread.start(); }
-    virtual void stopRefresh() override { refreshThread.stop(); }
+    virtual void stopRefresh() override { refreshThread.cancel(); }
     virtual bool refreshIsActive() override { return refreshThread.isRunning(); }
 
     virtual int getRowCount() const { return rows; };
@@ -50,8 +50,8 @@ void MonoLampMatrixHardware<rows, cols>::setLamps(MonoLampSet* lampsIn) {
 
 template <int rows, int cols>
 void MonoLampMatrixHardware<rows, cols>::refreshLamps() {
-    while (true) {
-        const bool* values = lamps->data();
+    while (!refreshThread.isCanceled()) {
+        const bool *values = lamps->data();
         for (int currentRow = 0; currentRow < rows; currentRow++) {
             refreshColumn(currentRow, values);
             values += cols;

@@ -5,6 +5,7 @@
 #ifndef PILIGHTS_TTHREAD_H
 #define PILIGHTS_TTHREAD_H
 
+#include <exception>
 #include "pigpio.h"
 
 class TThread {
@@ -13,16 +14,24 @@ public:
     virtual ~TThread();
 
     virtual void start();
-    virtual void stop();
-    virtual bool isRunning();
+    virtual void cancel();
+    virtual void kill();
+    bool isRunning();
+    bool isCanceled();
+    void checkCanceled();
+
+    class CanceledException : public std::exception {};
 
 protected:
     virtual void run();
+    void sleep(int seconds, int micros);
 
 private:
+    bool isThisThread() const;
     void doRun();
     static void *doStart(void* data);
 
+    bool canceled;
     pthread_t* thread;
 };
 
@@ -31,7 +40,7 @@ public:
     typedef void (T::*PtrToMemberFunction)();
 
     TThreadOf(T* instanceIn, PtrToMemberFunction funcIn);
-    virtual void run();
+    virtual void run() override;
 
 private:
     T* instance;

@@ -17,12 +17,12 @@ void PigpioLampMatrix::setLamps(std::shared_ptr<LampSet>& lampsIn) {
 }
 
 void PigpioLampMatrix::startRefresh() {
-    thread.stop();
+    thread.cancel();
     thread.start();
 }
 
 void PigpioLampMatrix::stopRefresh() {
-    thread.stop();
+    thread.cancel();
 }
 
 void PigpioLampMatrix::refreshLamps() {
