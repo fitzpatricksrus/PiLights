@@ -7,7 +7,7 @@
 
 // confidence interval mean +/- z * standard deviation/sqrt(number of samples)
 /*
- * z is 
+ * z is
 80%	1.282
 85%	1.440
 90%	1.645
