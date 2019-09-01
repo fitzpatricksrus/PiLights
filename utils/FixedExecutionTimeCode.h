@@ -5,6 +5,8 @@
 #ifndef PILIGHTS_FIXEDEXECUTIONTIMECODE_H
 #define PILIGHTS_FIXEDEXECUTIONTIMECODE_H
 
+#include "RunningStat.h"
+
 /*
  * FixedExecutionTimeCode will sleep the current thread to ensure that the objects lifetime is
  * at least as long as specified in the constructor.
@@ -24,6 +26,8 @@ public:
     int delayMicros;
     int startSeconds;
     int startMicros;
+
+    static RunningStat stats;
 };
 
 #endif //PILIGHTS_FIXEDEXECUTIONTIMECODE_H

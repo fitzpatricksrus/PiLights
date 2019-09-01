@@ -4,10 +4,11 @@
 
 #include "RunningStat.h"
 #include <cmath>
+#include <iostream>
 
 // confidence interval mean +/- z * standard deviation/sqrt(number of samples)
 /*
- * z is
+ * z is https://www.ztable.net/, for 95% look for 97.5, for 90% look for 95%, for 50% look for 75%
 80%	1.282
 85%	1.440
 90%	1.645
@@ -76,8 +77,18 @@ double RunningStat::confidenceIntervalLow() const {
     return mean() - marginOfError();
 }
 
-
-
 double RunningStat::coefficientOfVariance() const {
     return standardDeviation() / mean();
+}
+
+void RunningStat::dumpToCout() const {
+    std::cout << "count: " << numDataValues() << "\n";
+    std::cout << "mean: " << mean() << std::endl;
+    std::cout << "standardDeviation: " << standardDeviation() << "\n";
+    std::cout << "standardError: " << standardError() << "\n";
+    std::cout << "variance: " << variance() << "\n";
+    std::cout << "marginOfError: " << marginOfError() << "\n";
+    std::cout << "coefficientOfVariance: " << coefficientOfVariance() << "\n";
+    std::cout << "confidenceIntervalLow: " << confidenceIntervalLow() << "\n";
+    std::cout << "confidenceIntervalHigh: " << confidenceIntervalHigh() << std::endl;
 }

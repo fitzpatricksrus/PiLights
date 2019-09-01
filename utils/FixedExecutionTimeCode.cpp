@@ -34,6 +34,7 @@ void FixedExecutionTimeCode::delayNow() {
 
     int waitNeeded = desiredWait - waited;
     if (waitNeeded > 0) {
+        stats.push(waitNeeded);
         s = waitNeeded / MICRO_CONVERSION;
         m = waitNeeded - (s * MICRO_CONVERSION);
         if (waitNeeded > 50) {
@@ -45,4 +46,6 @@ void FixedExecutionTimeCode::delayNow() {
     delaySeconds = 0;
     delayMicros = 0;
 }
+
+RunningStat FixedExecutionTimeCode::stats;
 

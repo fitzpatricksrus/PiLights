@@ -14,6 +14,7 @@ int testRefresh() {
     matrix.startRefresh();
     gpioSleep(PI_TIME_RELATIVE, 15, 0);
     matrix.stopRefresh();
+    FixedExecutionTimeCode::stats.dumpToCout();
     return 0;
 }
 

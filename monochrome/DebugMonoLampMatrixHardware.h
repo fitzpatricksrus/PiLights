@@ -22,14 +22,14 @@ private:
 
 template <int rows, int cols>
 void DebugMonoLampMatrixHardware<rows, cols>::refreshColumn(int row, const bool* values) {
-    FixedExecutionTimeCode timer(0,1000*1000);
+    FixedExecutionTimeCode timer(0,1000*1000/250000);
 
-    if (row == 0) std::cout << std::endl;
+//    if (row == 0) std::cout << std::endl << row << ": ";
 
     for (int i = 0; i < cols; i++) {
-        std::cout << valStr(values[i]);
+//        std::cout << valStr(values[i]);
     }
-    std::cout << std::endl;
+//    std::cout << std::endl;
 }
 
 template <int rows, int cols>

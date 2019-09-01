@@ -31,6 +31,8 @@ public:
     double confidenceIntervalLow() const;
     double coefficientOfVariance() const;
 
+    void dumpToCout() const;
+
 private:
     int sampleSize;
     double m_oldM, m_newM, m_oldS, m_newS;
