@@ -28,7 +28,7 @@ add_executable(PiLights
         SimpleLampSet.cpp
         SimpleLampSet.h
         utils/TThread.cpp
-        utils/TThread.h monochrome/DebugMonoLampMatrixHardware.cpp monochrome/DebugMonoLampMatrixHardware.h utils/FixedExecutionTimeCode.cpp utils/FixedExecutionTimeCode.h)
+        utils/TThread.h monochrome/DebugMonoLampMatrixHardware.cpp monochrome/DebugMonoLampMatrixHardware.h utils/FixedExecutionTimeCode.cpp utils/FixedExecutionTimeCode.h utils/RunningStat.cpp utils/RunningStat.h)
 
 find_library(PIGPIOLIB libpigpio.so)
 TARGET_LINK_LIBRARIES(PiLights "${PIGPIOLIB}")
