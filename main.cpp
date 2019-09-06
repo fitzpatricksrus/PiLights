@@ -6,13 +6,18 @@
 #include "monochrome/SimpleMonoLampSet.h"
 
 int testRefresh() {
+    static const int wait = 20;
+
     bool values[] = { 0, 1, 1, 1,   1, 0, 1, 1,   1, 1, 0, 1 };
     SimpleMonoLampSet<12> lampSet;
     lampSet.setData(values);
     DebugMonoLampMatrixHardware<3,4> matrix;
     matrix.setLamps(&lampSet);
     matrix.startRefresh();
-    gpioSleep(PI_TIME_RELATIVE, 15, 0);
+    for (int i = 0; i < 15 * 1000 * 1000 / wait; i++) {
+        gpioDelay(wait);
+    }
+//    gpioSleep(PI_TIME_RELATIVE, 15, 0);
     matrix.stopRefresh();
     FixedExecutionTimeCode::stats.dumpToCout();
     return 0;
@@ -35,7 +40,7 @@ void* bing(void* userData) {
     return userData;
 }
 
-int main2() {
+int testGpio() {
     int err = gpioInitialise();
     if (err != PI_INIT_FAILED) {
        try {
@@ -69,7 +74,6 @@ int main() {
     if (err != PI_INIT_FAILED) {
         try {
             testRefresh();
-
         } catch (...) {
             gpioTerminate();
         }
