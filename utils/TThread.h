@@ -18,13 +18,15 @@ public:
     virtual void kill();
     bool isRunning();
     bool isCanceled();
-    void checkCanceled();
-
-    class CanceledException : public std::exception {};
+    void join();
 
 protected:
+    class CanceledException : public std::exception {};
+    class IllegalJoinException : public std::exception {};
+
     virtual void run();
     void sleep(int seconds, int micros);
+    void checkCanceled();
 
 private:
     bool isThisThread() const;

@@ -49,9 +49,14 @@ bool TThread::isCanceled() {
     }
 }
 
-void TThread::checkCanceled() {
-    if (isCanceled() && isThisThread()) {
-        throw CanceledException();
+void TThread::join() {
+    if (!isThisThread() || !isRunning()) {
+        throw IllegalJoinException();
+    } else {
+        //hey jf - implement this with a lock
+        while (!isCanceled()) {
+            sleep(0,1000);
+        }
     }
 }
 
@@ -66,6 +71,12 @@ void TThread::sleep(int seconds, int micros) {
 
 void TThread::run() {
     // do something useful
+}
+
+void TThread::checkCanceled() {
+    if (isCanceled() && isThisThread()) {
+        throw CanceledException();
+    }
 }
 
 bool TThread::isThisThread() const {
